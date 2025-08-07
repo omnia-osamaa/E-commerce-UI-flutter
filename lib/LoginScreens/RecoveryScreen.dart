@@ -16,6 +16,8 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
   final TextEditingController _resetCodeController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _isNewPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
@@ -63,21 +65,43 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
               SizedBox(height: screenHeight * 0.015),
               TextFormField(
                 controller: _newPasswordController,
-                obscureText: true,
+                obscureText: !_isNewPasswordVisible,
                 decoration: kOutlineInputDecoration(
                   labelText: "New Password",
                   prefixIcon: Icons.lock,
-                  suffixIcon: const Icon(Icons.remove_red_eye),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isNewPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isNewPasswordVisible = !_isNewPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.015),
               TextFormField(
                 controller: _confirmPasswordController,
-                obscureText: true,
+                obscureText: !_isConfirmPasswordVisible,
                 decoration: kOutlineInputDecoration(
                   labelText: "Confirm Password",
                   prefixIcon: Icons.lock,
-                  suffixIcon: const Icon(Icons.remove_red_eye),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isConfirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.03),

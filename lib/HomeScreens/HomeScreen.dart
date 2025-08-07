@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
             horizontal: AppConstants.defaultPadding,
-            vertical: screenHeight * 0.01,
+            vertical: screenHeight * 0.03,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

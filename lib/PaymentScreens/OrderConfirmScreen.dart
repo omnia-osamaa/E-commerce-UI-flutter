@@ -5,8 +5,66 @@ import 'package:shope_pluse/Constant/containerBoxbutton.dart';
 import 'package:shope_pluse/PaymentScreens/OrderSuccsess.dart';
 import 'package:shope_pluse/Provider/cart_provider.dart';
 
-class OrderConfirmScreen extends StatelessWidget {
+class OrderConfirmScreen extends StatefulWidget {
   const OrderConfirmScreen({super.key});
+
+  @override
+  State<OrderConfirmScreen> createState() => _OrderConfirmScreenState();
+}
+
+class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
+  String customerName = "Omnia Osama";
+  String street = "EL-obour";
+  String city = "Qaliobya,Egypt";
+
+  final nameController = TextEditingController();
+  final streetController = TextEditingController();
+  final cityController = TextEditingController();
+
+  void _showEditAddressDialog() {
+    nameController.text = customerName;
+    streetController.text = street;
+    cityController.text = city;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Edit Address"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: streetController,
+                decoration: InputDecoration(labelText: "Street"),
+              ),
+              TextField(
+                controller: cityController,
+                decoration: InputDecoration(labelText: "City"),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: Text("Cancel", style: TextStyle(color: kGreyColor)),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: Text("Save", style: TextStyle(color: kPrimaryColor)),
+            onPressed: () {
+              setState(() {
+                customerName = nameController.text;
+                street = streetController.text;
+                city = cityController.text;
+              });
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -18,6 +76,7 @@ class OrderConfirmScreen extends StatelessWidget {
     final totalPayment = subTotal + shippingFee;
 
     return Scaffold(
+      backgroundColor: kWhiteColor,
       appBar: AppBar(
         title: Text(
           "Confirm Order",
@@ -40,6 +99,8 @@ class OrderConfirmScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: AppConstants.mediumSpacing),
+
+                /// Shipping Address
                 Text(
                   "Shipping Address",
                   style: TextStyle(
@@ -52,54 +113,61 @@ class OrderConfirmScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                       horizontal: AppConstants.largePadding),
                   width: screenWidth,
-                  height: screenHeight * 0.15,
                   decoration: BoxDecoration(
                     color: kLightGreyColor,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black12.withOpacity(0.1),
-                        blurRadius: 4,
-                        spreadRadius: 2,
+                        color: Colors.black12.withOpacity(0.05),
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
                       )
                     ],
                   ),
-                  child: Center(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Dear customer",
-                              style: TextStyle(fontSize: screenWidth * 0.04),
+                              customerName,
+                              style: TextStyle(fontSize: screenWidth * 0.042),
                             ),
-                            TextButton(
-                              onPressed: () {},
+                            InkWell(
+                              onTap: _showEditAddressDialog,
                               child: Text(
                                 "Change",
                                 style: TextStyle(
-                                  fontSize: screenWidth * 0.04,
-                                  fontWeight: FontWeight.w700,
+                                  fontSize: screenWidth * 0.042,
+                                  fontWeight: FontWeight.bold,
                                   color: kPrimaryColor,
+                                  decoration: TextDecoration.underline,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
+                        SizedBox(height: 6),
                         Text(
-                          "EL-Shabab 135M",
-                          style: TextStyle(fontSize: screenWidth * 0.04),
+                          street,
+                          style: TextStyle(fontSize: screenWidth * 0.041),
                         ),
                         Text(
-                          "EL-Obour City,Qaliobya,Egypt",
-                          style: TextStyle(fontSize: screenWidth * 0.04),
+                          city,
+                          style: TextStyle(fontSize: screenWidth * 0.041),
                         ),
                       ],
                     ),
                   ),
+                ),
+                Divider(
+                  height: AppConstants.extraLargeSpacing,
+                  thickness: 1,
+                  color: kGreyColor,
                 ),
                 SizedBox(height: AppConstants.largeSpacing),
                 Row(
@@ -112,17 +180,6 @@ class OrderConfirmScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Change",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight: FontWeight.w700,
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(height: AppConstants.largeSpacing),
@@ -152,7 +209,13 @@ class OrderConfirmScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                Divider(
+                  height: AppConstants.extraLargeSpacing,
+                  thickness: 1,
+                  color: kGreyColor,
+                ),
                 SizedBox(height: AppConstants.largeSpacing),
+
                 Text(
                   "Delivery Method",
                   style: TextStyle(

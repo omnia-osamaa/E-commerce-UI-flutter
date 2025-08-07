@@ -91,7 +91,7 @@ class AuthProvider extends ChangeNotifier {
     setLoading(true);
     setErrorMessage(null);
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       if (password == confirmPassword && password.length >= 6) {
         print("Account created successfully!");
       } else {

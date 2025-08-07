@@ -19,6 +19,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
@@ -79,21 +81,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: screenHeight * 0.015),
               TextFormField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: !_isPasswordVisible,
                 decoration: kOutlineInputDecoration(
                   labelText: "Enter Password",
                   prefixIcon: Icons.lock,
-                  suffixIcon: const Icon(Icons.remove_red_eye),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.015),
               TextFormField(
                 controller: _confirmPasswordController,
-                obscureText: true,
+                obscureText: !_isConfirmPasswordVisible,
                 decoration: kOutlineInputDecoration(
                   labelText: "Confirm Password",
                   prefixIcon: Icons.lock,
-                  suffixIcon: const Icon(Icons.remove_red_eye),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isConfirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.015),

@@ -11,9 +11,10 @@ class AddressScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: kWhiteColor,
       appBar: AppBar(
         title: Text(
-          "Shipping Address",
+          "Shipping Details",
           style: TextStyle(
             fontSize: screenWidth * 0.06,
             fontWeight: FontWeight.bold,

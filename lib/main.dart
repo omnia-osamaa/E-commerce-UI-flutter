@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shope_pluse/HomeScreens/NavigatorScreen.dart';
+import 'package:shope_pluse/LoginScreens/SplashScreen.dart';
 import 'package:shope_pluse/Provider/auth_provider.dart';
 import 'package:shope_pluse/Provider/cart_provider.dart';
 import 'package:shope_pluse/Provider/favorite_provider.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        home: const NavigationScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

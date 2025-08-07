@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shope_pluse/Constant/Colors.dart';
@@ -14,19 +15,48 @@ class OTPVerifyScreen extends StatefulWidget {
 }
 
 class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
-  TextEditingController _otpController = TextEditingController(text: "");
+  final TextEditingController _otpController = TextEditingController();
+  late Timer _timer;
+  int _secondsRemaining = 60;
+  bool _isResendEnabled = false;
 
-  BoxDecoration _pinPutDecoration(BuildContext context) {
-    return BoxDecoration(
-      border: Border.all(color: Theme.of(context).primaryColor),
-      borderRadius: BorderRadius.circular(15.0),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _secondsRemaining = 60;
+    _isResendEnabled = false;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_secondsRemaining == 0) {
+        timer.cancel();
+        setState(() {
+          _isResendEnabled = true;
+        });
+      } else {
+        setState(() {
+          _secondsRemaining--;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _otpController.dispose();
+    _timer.cancel();
     super.dispose();
+  }
+
+  BoxDecoration _pinPutDecoration(BuildContext context) {
+    return BoxDecoration(
+      color: kWhiteColor,
+      border: Border.all(color: kPrimaryColor, width: 1.5),
+      borderRadius: BorderRadius.circular(12),
+    );
   }
 
   @override
@@ -47,35 +77,62 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: screenHeight * 0.02),
+              Icon(Icons.lock_outline, size: 70, color: kPrimaryColor),
+              SizedBox(height: screenHeight * 0.02),
+
               const Text(
-                "Enter OTP",
+                "OTP Verification",
                 style: kHeadingTextStyle,
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: screenHeight * 0.03),
+
+              SizedBox(height: screenHeight * 0.015),
+
               const Text(
                 "A verification code has been sent to your email.",
                 style: kBodyTextStyle,
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: screenHeight * 0.03),
+
+              SizedBox(height: screenHeight * 0.05),
+
+              // OTP Input
               TextFieldPin(
                 textController: _otpController,
                 autoFocus: true,
                 codeLength: 4,
                 alignment: MainAxisAlignment.center,
-                defaultBoxSize: screenWidth * 0.12,
-                margin: screenWidth * 0.024,
-                selectedBoxSize: screenWidth * 0.11,
-                textStyle: const TextStyle(fontSize: 16),
+                defaultBoxSize: screenWidth * 0.13,
+                margin: screenWidth * 0.025,
+                selectedBoxSize: screenWidth * 0.13,
+                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 defaultDecoration: _pinPutDecoration(context).copyWith(
                   border: Border.all(color: kGreyColor),
                 ),
                 selectedDecoration: _pinPutDecoration(context),
-                onChange: (code) {},
+                onChange: (code) {
+                  setState(() {}); // Live update for input
+                },
               ),
-              SizedBox(height: screenHeight * 0.03),
+
+              SizedBox(height: screenHeight * 0.02),
+
+              // Timer
+              Text(
+                _isResendEnabled
+                    ? "Didn't get the code?"
+                    : "Resend code in $_secondsRemaining sec",
+                style: const TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+
+              // Resend Button
+              
+
+              SizedBox(height: screenHeight * 0.04),
+
+              // Verify Button
               ElevatedButton(
                 onPressed: authProvider.isLoading
                     ? null
@@ -84,8 +141,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                         if (authProvider.errorMessage == null) {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const RecoveryScreen()),
+                            MaterialPageRoute(builder: (context) => const RecoveryScreen()),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -94,19 +150,18 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                         }
                       },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(screenHeight * 0.07),
+                  minimumSize: Size.fromHeight(screenHeight * 0.065),
                   backgroundColor: kPrimaryColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: authProvider.isLoading
                     ? const CircularProgressIndicator(color: kWhiteColor)
-                    : const Text(
-                        "Verify",
-                        style: kButtonTextStyle,
-                      ),
+                    : const Text("Verify OTP", style: kButtonTextStyle),
               ),
+
+              SizedBox(height: screenHeight * 0.02),
             ],
           ),
         ),

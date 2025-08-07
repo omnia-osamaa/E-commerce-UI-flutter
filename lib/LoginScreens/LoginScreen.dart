@@ -12,11 +12,14 @@ class LoginScreen extends StatefulWidget {
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
+  
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+
 
   @override
   void dispose() {
@@ -66,14 +69,24 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: screenHeight * 0.015),
               TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: kOutlineInputDecoration(
-                  labelText: "Enter Password",
-                  prefixIcon: Icons.lock,
-                  suffixIcon: const Icon(Icons.remove_red_eye),
-                ),
-              ),
+  controller: _passwordController,
+  obscureText: !_isPasswordVisible,
+  decoration: kOutlineInputDecoration(
+    labelText: "Enter Password",
+    prefixIcon: Icons.lock,
+    suffixIcon: IconButton(
+      icon: Icon(
+        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+      ),
+      onPressed: () {
+        setState(() {
+          _isPasswordVisible = !_isPasswordVisible;
+        });
+      },
+    ),
+  ),
+),
+
               Align(
                 alignment: Alignment.bottomRight,
                 child: TextButton(

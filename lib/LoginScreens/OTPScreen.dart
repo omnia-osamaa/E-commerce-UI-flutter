@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shope_pluse/Constant/Colors.dart';
 import 'package:shope_pluse/Constant/Style.dart';
 import 'package:shope_pluse/LoginScreens/OTPVerify.dart';
-import 'package:shope_pluse/Models/viewmodels.dart';
+import 'package:shope_pluse/Provider/auth_provider.dart'; 
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -25,7 +25,7 @@ class _OTPScreenState extends State<OTPScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final authViewModel = Provider.of<AuthViewModel>(context);
+    final authProvider = Provider.of<AuthProvider>(context); // تم التعديل هنا
 
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -61,12 +61,14 @@ class _OTPScreenState extends State<OTPScreen> {
               ),
               SizedBox(height: screenHeight * 0.03),
               ElevatedButton(
-                onPressed: authViewModel.isLoading
+                onPressed: authProvider.isLoading // تم التعديل هنا
                     ? null
                     : () async {
-                        authViewModel.setLoading(true);
+                        authProvider.setLoading(true); // تم التعديل هنا
+                        // هنا يمكنك إضافة منطق إرسال OTP عبر الرقم الهاتفي
+                        // حالياً، هو مجرد تأخير ثم الانتقال
                         await Future.delayed(const Duration(seconds: 1));
-                        authViewModel.setLoading(false);
+                        authProvider.setLoading(false); // تم التعديل هنا
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -80,7 +82,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: authViewModel.isLoading
+                child: authProvider.isLoading // تم التعديل هنا
                     ? const CircularProgressIndicator(color: kWhiteColor)
                     : const Text(
                         "Send Code",

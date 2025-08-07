@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shope_pluse/Constant/Colors.dart';
 import 'package:shope_pluse/Constant/Style.dart';
-import 'package:shope_pluse/LoginScreens/OTPScreen.dart';
-import 'package:shope_pluse/LoginScreens/RecoveryScreen.dart';
+import 'package:shope_pluse/LoginScreens/OTPVerify.dart'; // تأكد من استيراد OTPVerify
 import 'package:shope_pluse/Provider/auth_provider.dart';
 
 class ForgetScreen extends StatefulWidget {
@@ -27,8 +26,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final authProvider =
-        Provider.of<AuthProvider>(context); // Changed to authProvider
+    final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -83,7 +81,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RecoveryScreen()),
+                                builder: (context) => const OTPVerifyScreen()), // الانتقال مباشرةً إلى OTPVerifyScreen
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -117,11 +115,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const OTPScreen()),
-                        );
+                        // يمكنك إضافة منطق آخر هنا إذا كنت ترغب في الانتقال إلى شاشة أخرى
                       },
                       child: const Text(
                         "Verify Using Number",
